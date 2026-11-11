@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D-FACT 판별 노트 · 5학년 3~4차시</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coral:#EF5B4F; --coral-d:#D4433A; --coral-l:#FDECE9; --coral-ll:#FFF6F4;
+  --ink:#3E3630; --ink2:#6E645B; --ink3:#A0958B; --line:#E9E0D8; --bg:#FAF6F2; --card:#fff;
+  --ai:#EF5B4F; --ai-l:#FDECE9; --real:#23866A; --real-l:#E3F4EE; --hold:#C98A0C; --hold-l:#FCF2DC;
+  --r:16px; --shadow:0 2px 0 rgba(62,54,48,.06),0 6px 20px rgba(62,54,48,.06);
+  --head:"Black Han Sans","Noto Sans KR",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input,textarea{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 22px 60px}
+.hidden{display:none!important}
+
+/* top bar */
+.top{display:flex;align-items:center;gap:14px;padding:14px 22px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top .brand{font-family:var(--head);font-size:22px;letter-spacing:-.5px;color:var(--ink)}
+.top .brand b{color:var(--coral);font-weight:400}
+.top .sp{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:var(--coral-l);color:var(--coral-d);font-weight:700;font-size:14px;white-space:nowrap}
+.chip.gray{background:#F1ECE7;color:var(--ink2)}
+.chip.dark{background:var(--ink);color:#fff}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:10px 22px;border-radius:14px;font-weight:700;font-size:17px;background:var(--coral);color:#fff;box-shadow:0 3px 0 var(--coral-d);transition:transform .05s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--coral-d)}
+.btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line);box-shadow:0 3px 0 var(--line)}
+.btn.dark{background:var(--ink);box-shadow:0 3px 0 #1f1a16}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn.sm{min-height:40px;padding:6px 14px;font-size:15px;border-radius:11px}
+.link{color:var(--ink2);text-decoration:underline;font-size:15px;padding:8px}
+
+/* start */
+.start{min-height:100vh;display:grid;place-items:center;padding:24px}
+.start-card{width:min(640px,100%);background:#fff;border-radius:28px;padding:40px 40px 30px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.start-eyebrow{color:var(--coral);font-weight:700;font-size:15px}
+.start h1{font-family:var(--head);font-weight:400;font-size:46px;line-height:1.15;margin:8px 0 6px;letter-spacing:-1px}
+.start .sub{color:var(--ink2);margin:0 0 26px}
+.steps-mini{display:flex;gap:8px;margin:0 0 28px;flex-wrap:wrap}
+.steps-mini span{display:flex;align-items:center;gap:6px;background:var(--coral-ll);border:1px solid var(--coral-l);padding:6px 12px;border-radius:10px;font-weight:700;font-size:15px}
+.steps-mini i{font-style:normal;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--coral);color:#fff;font-size:13px}
+.field-label{font-weight:700;margin-bottom:8px;display:block}
+.text-in{width:100%;min-height:58px;border:2px solid var(--line);border-radius:14px;padding:12px 16px;font-size:20px;background:#fff;outline:none}
+.text-in:focus{border-color:var(--coral)}
+.start .row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.start .row .btn{flex:1}
+.start-foot{display:flex;justify-content:space-between;align-items:center;margin-top:22px;color:var(--ink3);font-size:14px}
+
+/* board */
+.board-head{display:flex;align-items:flex-end;gap:16px;margin:8px 0 20px;flex-wrap:wrap}
+.board-head h2{font-family:var(--head);font-weight:400;font-size:32px;margin:0;letter-spacing:-.5px}
+.board-head p{margin:2px 0 0;color:var(--ink2)}
+.prog{flex:1;min-width:200px}
+.prog-bar{height:12px;border-radius:999px;background:#EEE6DF;overflow:hidden}
+.prog-bar i{display:block;height:100%;background:var(--coral);border-radius:999px;transition:width .3s}
+.prog-txt{text-align:right;font-weight:700;color:var(--ink2);font-size:14px;margin-top:4px}
+.media-row{margin-bottom:22px}
+.media-row h3{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.mcard{background:#fff;border:2px solid var(--line);border-radius:var(--r);overflow:hidden;text-align:left;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:border-color .15s,transform .1s}
+.mcard:active{transform:scale(.99)}
+.mcard:hover{border-color:#DCCFC4}
+.mcard.done{border-color:#CDE6DD}
+.mthumb{aspect-ratio:16/9;background:#F3EEE9;position:relative;display:grid;place-items:center;overflow:hidden}
+.mthumb img,.mthumb video{width:100%;height:100%;object-fit:cover;display:block}
+.mthumb.nofile::after{content:'파일 준비 중';color:var(--ink3);font-size:14px}
+.mthumb .ph{color:var(--ink3);display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px}
+.mthumb .badge-num{position:absolute;left:10px;top:10px;background:rgba(62,54,48,.85);color:#fff;font-weight:700;padding:3px 10px;border-radius:8px;font-size:14px}
+.mthumb .badge-trial{position:absolute;right:10px;top:10px;background:var(--coral);color:#fff;font-weight:700;padding:3px 10px;border-radius:8px;font-size:13px}
+.mbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.mtitle{font-weight:700;line-height:1.35}
+.mstate{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:auto}
+.verdict{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-weight:900;font-size:14px;padding:4px 10px;border-radius:8px}
+.verdict.AI{background:var(--ai-l);color:var(--ai)}
+.verdict.REAL{background:var(--real-l);color:var(--real)}
+.verdict.HOLD{background:var(--hold-l);color:var(--hold)}
+.mark{font-weight:900;font-size:14px;padding:4px 10px;border-radius:8px}
+.mark.ok{background:var(--real-l);color:var(--real)}
+.mark.no{background:var(--ai-l);color:var(--ai)}
+.mark.hold{background:var(--hold-l);color:var(--hold)}
+.board-actions{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px;padding-top:18px;border-top:1px dashed var(--line)}
+.notice{background:#fff;border:1.5px dashed #E4D7CC;border-radius:14px;padding:12px 16px;color:var(--ink2);font-size:15px;margin-bottom:18px}
+
+/* item */
+.item-wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:900px){.item-wrap{grid-template-columns:1fr}.grid3{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.grid3{grid-template-columns:1fr}.start h1{font-size:36px}.start-card{padding:28px 22px}}
+.panel{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.media-panel{padding:16px;position:sticky;top:84px}
+@media (max-width:900px){.media-panel{position:static}}
+.media-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.media-head h2{margin:0;font-size:21px;line-height:1.3}
+.stage{background:#1F1B18;border-radius:14px;display:grid;place-items:center;min-height:260px;position:relative;overflow:hidden}
+.stage.light{background:#F3EEE9}
+.ph-wrap{position:relative;display:inline-block;line-height:0;max-width:100%}
+.ph-img{max-width:100%;max-height:58vh;width:auto;height:auto;display:block;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.ph-wrap.loupe-on .ph-img{touch-action:none;cursor:none}
+.lens{position:absolute;width:190px;height:190px;border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 2px var(--coral),0 10px 30px rgba(0,0,0,.35);pointer-events:none;background-repeat:no-repeat;display:none;transform:translate(-50%,-50%);z-index:3}
+.vid{max-width:100%;max-height:56vh;display:block;background:#000}
+.placeholder{color:#B9AEA4;display:flex;flex-direction:column;align-items:center;gap:8px;padding:50px 20px;text-align:center;font-size:15px}
+.placeholder b{color:#E6DDD5;font-size:17px}
+.stage.light .placeholder b{color:var(--ink2)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.tool{min-height:44px;padding:6px 14px;border-radius:11px;background:#F4EFEA;font-weight:700;font-size:15px;display:inline-flex;align-items:center;gap:6px;border:1.5px solid transparent}
+.tool.on{background:var(--coral-l);color:var(--coral-d);border-color:#F6C3BD}
+.tool-sep{width:1px;height:28px;background:var(--line);margin:0 2px}
+.tool-label{font-size:13px;color:var(--ink3);font-weight:700;margin-right:2px}
+.seek{flex:1;min-width:140px;accent-color:var(--coral)}
+.time{font-variant-numeric:tabular-nums;color:var(--ink2);font-size:14px;min-width:92px;text-align:right}
+.tool-hint{margin-top:10px;font-size:14px;color:var(--ink2);background:var(--coral-ll);border-radius:10px;padding:8px 12px}
+.wave-box{width:100%;padding:18px 16px}
+.wave{position:relative;width:100%;height:150px;background:#2A2521;border-radius:12px;touch-action:none;cursor:pointer;overflow:hidden}
+.wave canvas{width:100%;height:100%;display:block}
+.audio-icon{display:flex;align-items:center;gap:10px;color:#E6DDD5;margin-bottom:12px;font-weight:700}
+
+/* step panel */
+.step-panel{padding:0;overflow:hidden}
+.stepper{display:flex;border-bottom:1px solid var(--line);background:#FCFAF8}
+.stepper button{flex:1;padding:14px 6px 12px;font-weight:700;font-size:15px;color:var(--ink3);border-bottom:3px solid transparent;display:flex;flex-direction:column;align-items:center;gap:4px;line-height:1.2}
+.stepper button i{font-style:normal;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#EEE6DF;color:var(--ink2);font-size:14px}
+.stepper button.cur{color:var(--ink);border-bottom-color:var(--coral)}
+.stepper button.cur i{background:var(--coral);color:#fff}
+.stepper button.ok i{background:var(--real);color:#fff}
+.stepper button.ok{color:var(--ink2)}
+.stepper button:disabled{opacity:.45;cursor:default}
+.step-body{padding:20px 22px 22px}
+.step-title{font-family:var(--head);font-weight:400;font-size:26px;margin:0 0 4px;letter-spacing:-.5px}
+.step-desc{color:var(--ink2);margin:0 0 18px;font-size:15px}
+.q{margin-bottom:18px}
+.q-label{font-weight:700;margin-bottom:8px;display:flex;gap:8px;align-items:flex-start}
+.q-label .n{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--ink);color:#fff;font-size:13px;margin-top:2px}
+.q-tip{font-size:13px;color:var(--ink3);font-weight:500;margin:-4px 0 8px 32px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{min-height:48px;padding:8px 16px;border-radius:12px;border:2px solid var(--line);background:#fff;font-weight:700;font-size:16px;flex:1;min-width:110px}
+.opt.sel{border-color:var(--ink);background:var(--ink);color:#fff}
+.opt.sel.odd{border-color:var(--ai);background:var(--ai);color:#fff}
+.opt.sel.nat{border-color:var(--real);background:var(--real);color:#fff}
+.opt.sel.unk{border-color:var(--hold);background:var(--hold);color:#fff}
+.opt:disabled{opacity:.4}
+.memo{width:100%;border:2px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px;margin-top:8px;resize:vertical;min-height:48px;outline:none;background:#fff}
+.memo:focus{border-color:var(--coral)}
+.step-foot{display:flex;justify-content:space-between;gap:10px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.need{color:var(--coral-d);font-size:14px;font-weight:700;align-self:center}
+
+/* source card */
+.post{border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;background:#FCFAF8;margin-bottom:18px}
+.post-top{display:flex;align-items:center;gap:10px}
+.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:#fff;background:#B8AB9F;flex:none}
+.avatar.official{background:#2F6FB3}
+.post-name{font-weight:700;line-height:1.2}
+.post-meta{font-size:13px;color:var(--ink3)}
+.acc{font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;vertical-align:2px}
+.acc.official{background:#E4EEF9;color:#2F6FB3}
+.acc.personal{background:#F1ECE7;color:var(--ink2)}
+.post-text{margin:10px 0 0;font-size:15px}
+.post.none{border-style:dashed;text-align:center;color:var(--ink2)}
+.post.none .big{font-size:30px;line-height:1;margin-bottom:6px}
+.revbox{margin-top:12px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;font-size:15px}
+.revbox .lbl{font-weight:700;color:var(--coral-d);font-size:13px}
+.scan{display:flex;align-items:center;gap:10px;color:var(--ink2);justify-content:center;padding:6px}
+.spinner{width:20px;height:20px;border-radius:50%;border:3px solid var(--coral-l);border-top-color:var(--coral);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* judge */
+.judge{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.jbtn{min-height:86px;border-radius:16px;border:2.5px solid var(--line);background:#fff;font-weight:900;font-size:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.jbtn small{font-weight:500;font-size:12px;color:var(--ink3)}
+.jbtn.AI.sel{border-color:var(--ai);background:var(--ai-l);color:var(--ai)}
+.jbtn.REAL.sel{border-color:var(--real);background:var(--real-l);color:var(--real)}
+.jbtn.HOLD.sel{border-color:var(--hold);background:var(--hold-l);color:var(--hold)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.ev{padding:7px 12px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:14px;font-weight:500;text-align:left;line-height:1.35}
+.ev b{font-weight:900;margin-right:4px}
+.ev.odd b{color:var(--ai)}
+.ev.nat b{color:var(--real)}
+.ev.src b{color:#2F6FB3}
+.ev.used{background:#F4EFEA;color:var(--ink3);border-style:dashed}
+.sentence{background:var(--coral-ll);border:1.5px solid var(--coral-l);border-radius:14px;padding:14px 16px;font-size:16px;margin:4px 0 16px}
+.sentence .blank{display:inline;border-bottom:2px solid var(--coral);font-weight:700;padding:0 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.first-box{background:#F7F3EF;border-radius:14px;padding:12px 14px;margin-bottom:16px;font-size:15px}
+
+/* results */
+.res-head{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:6px 0 18px}
+.res-head h2{font-family:var(--head);font-weight:400;font-size:32px;margin:0}
+.res-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.res-table th{background:#F4EFEA;text-align:left;font-size:14px;padding:10px 12px;color:var(--ink2);white-space:nowrap}
+.res-table td{padding:12px;border-top:1px solid var(--line);vertical-align:top;font-size:15px}
+.res-table td.nm{font-weight:700;white-space:nowrap}
+.res-table .more{display:block;margin-top:6px;color:var(--hold);font-size:14px}
+.res-table .ana{display:block;margin-top:6px;font-size:13px;color:var(--ink2)}
+.sect{margin-top:28px}
+.sect h3{font-size:19px;margin:0 0 10px}
+.trial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:760px){.trial-grid{grid-template-columns:1fr}.res-table .hide-sm{display:none}}
+.tcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)}
+.tflow{display:flex;align-items:center;gap:8px;margin:8px 0;flex-wrap:wrap}
+.tcard p{margin:4px 0 0;font-size:14px;color:var(--ink2)}
+.ana-box{background:#F7F3EF;border-radius:12px;padding:10px 12px;margin-top:8px;font-size:14px}
+.ana-step{display:flex;gap:8px;align-items:flex-start;margin:3px 0}
+.ana-step .s{flex:none;font-weight:900;font-size:12px;padding:2px 7px;border-radius:6px;background:#E9E1DA}
+.ana-step .s.ok{background:var(--real-l);color:var(--real)}
+.ana-step .s.no{background:var(--ai-l);color:var(--ai)}
+
+/* teacher */
+.t-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:800px){.t-grid{grid-template-columns:1fr}}
+.t-card{padding:20px 22px}
+.t-card h3{margin:0 0 6px;font-size:19px}
+.t-card p{margin:0 0 14px;color:var(--ink2);font-size:15px}
+.demo-list{display:grid;gap:10px}
+.demo-btn{display:flex;align-items:center;gap:12px;border:2px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff;text-align:left;font-weight:700}
+.demo-btn .ic{width:40px;height:40px;border-radius:10px;background:var(--coral-l);display:grid;place-items:center;flex:none}
+.check-list{list-style:none;margin:0;padding:0;font-size:14px}
+.check-list li{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+.check-list .st-ok{color:var(--real);font-weight:700}
+.check-list .st-no{color:var(--ai);font-weight:700}
+.check-list .st-wait{color:var(--ink3)}
+.bigcode{font-family:var(--head);font-size:120px;letter-spacing:12px;text-align:center;color:var(--coral);line-height:1.1;margin:10px 0}
+.ans-table td{font-size:16px}
+
+/* modal / toast */
+.modal-bg{position:fixed;inset:0;background:rgba(40,33,28,.5);display:grid;place-items:center;z-index:100;padding:20px}
+.modal{background:#fff;border-radius:22px;padding:26px;width:min(480px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal.wide{width:min(980px,100%)}
+.modal h3{margin:0 0 8px;font-size:21px}
+.modal p{margin:0 0 16px;color:var(--ink2)}
+.modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+.code-in{width:100%;font-size:34px;text-align:center;letter-spacing:12px;min-height:70px;border:2px solid var(--line);border-radius:14px;outline:none}
+.code-in:focus{border-color:var(--coral)}
+.err{color:var(--coral-d);font-weight:700;font-size:14px;min-height:20px;margin-top:8px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;z-index:200;box-shadow:0 8px 30px rgba(0,0,0,.25);animation:pop .2s}
+@keyframes pop{from{opacity:0;transform:translate(-50%,10px)}}
+.png-prev{width:100%;border-radius:12px;border:1px solid var(--line);display:block}
+.ico{width:20px;height:20px;flex:none}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="materials.js"></script>
+<script>
+(function(){
+"use strict";
+const CFG = window.DFACT_CONFIG || {items:[],demo:[],teacherPin:"1234",revealCode:"0000"};
+const ITEMS = CFG.items, DEMO = CFG.demo || [];
+const KEY = "dfact34:v1";
+
+/* ---------- 매체별 질문 (수업PPT 18번) ---------- */
+const TYPE = {
+  photo:{name:"사진", tool:"돋보기로 확대해서 살펴보세요.",
+    qs:[["글자(간판·옷·책 등)의 형태는 어떤가요?","글자 형태","돋보기로 글자를 크게 보세요","글자 형태가 이상했다","글자 형태가 자연스러웠다"],
+        ["피부, 물건 표면의 광택은 어떤가요?","표면 광택","너무 매끈하거나 반짝이지 않나요?","피부나 물건 표면이 지나치게 매끈했다","피부와 물건 표면이 자연스러웠다"],
+        ["그림자와 빛의 방향은 어떤가요?","그림자와 빛","그림자가 모두 같은 쪽으로 생겼나요?","그림자와 빛의 방향이 맞지 않았다","그림자와 빛의 방향이 맞았다"],
+        ["안경, 귀걸이, 손가락 등 작은 부분은 어떤가요?","작은 부분","개수와 모양을 세어 보세요","작은 부분의 모양이 이상했다","작은 부분까지 자연스러웠다"]]},
+  video:{name:"영상", tool:"느리게 재생하거나 한 장면씩 넘겨 보세요.",
+    qs:[["입 모양과 소리가 맞나요?","입 모양과 소리","0.5배로 느리게 들어 보세요","입 모양과 소리가 맞지 않았다","입 모양과 소리가 맞았다"],
+        ["눈을 자연스럽게 깜빡이나요?","눈 깜빡임","한 장면씩 넘기며 눈을 보세요","눈을 깜빡이는 모습이 어색했다","눈을 자연스럽게 깜빡였다"],
+        ["장면이 바뀌어도 물건의 모양이 그대로인가요?","물건 형태","뒤쪽 물건과 글씨를 보세요","장면이 바뀔 때 물건 모양이 달라졌다","장면이 바뀌어도 물건 모양이 그대로였다"],
+        ["인물의 움직임은 어떤가요?","인물 움직임","얼굴 테두리가 흔들리지 않나요?","인물의 움직임이 어색했다","인물의 움직임이 자연스러웠다"]]},
+  audio:{name:"음원", tool:"소리 그림(파형)을 보며 구간을 반복해 들어 보세요.",
+    qs:[["숨소리가 자연스럽게 들리나요?","숨소리","말 사이에 숨 쉬는 소리가 있나요?","숨소리가 들리지 않거나 어색했다","숨소리가 자연스럽게 들렸다"],
+        ["말이 어색하게 끊기지 않나요?","말 끊김","소리 그림에서 이상하게 끊긴 곳을 찾아보세요","말이 어색하게 끊겼다","말이 매끄럽게 이어졌다"],
+        ["배경 소리는 자연스러운가요?","배경 소리","주변 소리가 아예 없거나 갑자기 바뀌나요?","배경 소리가 어색했다","배경 소리가 자연스러웠다"],
+        ["말투와 억양은 어떤가요?","말투와 억양","문장마다 억양이 똑같지 않나요?","말투와 억양이 기계처럼 일정했다","말투와 억양이 자연스러웠다"]]}
+};
+const S2OPT = [["odd","이상해요"],["nat","자연스러워요"],["unk","잘 모르겠어요"]];
+const VNAME = {AI:"AI 콘텐츠", REAL:"진짜 콘텐츠", HOLD:"판단 보류"};
+const ACC = {official:"공식 계정", personal:"개인 계정", unknown:"알 수 없음"};
+
+/* ---------- 저장 ---------- */
+function blank(){ return {group:"", items:{}, unlocked:false}; }
+function load(){ try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s && typeof s==="object") return Object.assign(blank(), s); }catch(e){} return blank(); }
+let S = load();
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+let DS = {}; // 시연 모드 상태(저장하지 않음)
+function st(id, demo){ const box = demo ? DS : S.items; if(!box[id]) box[id] = {step:0, first:{}, s1:{}, s2:{a:[],m:[]}, s3:{}, done:false}; return box[id]; }
+function getItem(id, demo){ return (demo?DEMO:ITEMS).find(x => String(x.id) === String(id)); }
+
+/* ---------- 유틸 ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+function esc(t){ return String(t==null?"":t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function toast(msg){ const t = document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 1900); }
+function fmt(t){ if(!isFinite(t)) t=0; const m=Math.floor(t/60), s=t-m*60; return m+":"+(s<10?"0":"")+s.toFixed(1); }
+const ICON = {
+  photo:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-8 8"/></svg>',
+  video:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg>',
+  audio:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></svg>',
+  search:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>'
+};
+
+/* ---------- 모달 ---------- */
+function modal(html, opts={}){
+  closeModal();
+  const bg = document.createElement("div"); bg.className="modal-bg"; bg.id="modal";
+  bg.innerHTML = `<div class="modal ${opts.wide?'wide':''}" role="dialog" aria-modal="true">${html}</div>`;
+  bg.addEventListener("click", e => { if(e.target===bg && !opts.sticky) closeModal(); });
+  document.body.appendChild(bg);
+  const f = bg.querySelector("[autofocus]"); if(f) setTimeout(()=>f.focus(), 30);
+  return bg;
+}
+function closeModal(){ const m = $("#modal"); if(m) m.remove(); }
+function confirmBox(title, text, okLabel, onOk){
+  const m = modal(`<h3>${esc(title)}</h3><p>${esc(text)}</p><div class="acts"><button class="btn ghost" data-x>취소</button><button class="btn" data-ok>${esc(okLabel)}</button></div>`);
+  m.querySelector("[data-x]").onclick = closeModal;
+  m.querySelector("[data-ok]").onclick = () => { closeModal(); onOk(); };
+}
+function codeBox(title, text, check, onOk){
+  const m = modal(`<h3>${esc(title)}</h3><p>${esc(text)}</p><input class="code-in" inputmode="numeric" autocomplete="off" maxlength="8" autofocus><div class="err"></div><div class="acts"><button class="btn ghost" data-x>취소</button><button class="btn" data-ok>확인</button></div>`);
+  const inp = m.querySelector("input"), err = m.querySelector(".err");
+  const go = () => { if(check(inp.value.trim())){ closeModal(); onOk(); } else { err.textContent="번호가 맞지 않아요."; inp.select(); } };
+  m.querySelector("[data-x]").onclick = closeModal;
+  m.querySelector("[data-ok]").onclick = go;
+  inp.addEventListener("keydown", e => { if(e.key==="Enter") go(); });
+}
+
+/* ---------- 화면 전환 ---------- */
+let cleanups = [];
+function cleanup(){ cleanups.forEach(f => { try{f();}catch(e){} }); cleanups = []; }
+const app = $("#app");
+let view = {name:"start"};
+function go(v){ cleanup(); view = v; render(); window.scrollTo(0,0); }
+function render(){
+  closeModal();
+  ({start:renderStart, board:renderBoard, item:renderItem, results:renderResults, teacher:renderTeacher, answers:renderAnswers})[view.name]();
+}
+function topBar(right){
+  return `<div class="top"><div class="brand">D-FACT <b>판별 노트</b></div><span class="chip gray">5학년 3~4차시</span><div class="sp"></div>${right||""}</div>`;
+}
+
+/* ================= 시작 ================= */
+function doneCount(){ return ITEMS.filter(it => S.items[it.id] && S.items[it.id].done).length; }
+function renderStart(){
+  const has = S.group && Object.keys(S.items).length;
+  app.innerHTML = `<div class="start"><div class="start-card">
+    <div class="start-eyebrow">D-FACT 연구회 · 디지털 미디어 문해교육</div>
+    <h1>이 정보,<br>믿을 수 있을까?</h1>
+    <p class="sub">확인하는 세 단계로 자료 ${ITEMS.length}점을 판별하고, 판단과 근거를 남깁니다.</p>
+    <div class="steps-mini"><span><i>1</i>출처 확인하기</span><span><i>2</i>자세히 살펴보기</span><span><i>3</i>판단하기</span></div>
+    <label class="field-label" for="gname">우리 모둠 이름</label>
+    <input id="gname" class="text-in" maxlength="20" placeholder="예) 3모둠 진실탐정단" value="${esc(S.group)}">
+    <div class="row">
+      ${has ? `<button class="btn ghost" id="bNew">처음부터 새로</button><button class="btn" id="bGo">이어서 하기 (${doneCount()}/${ITEMS.length})</button>`
+            : `<button class="btn" id="bGo">시작하기</button>`}
+    </div>
+    <div class="start-foot"><span>프로그램은 판단을 대신해 주지 않습니다. 판단은 우리가 합니다.</span><button class="link" id="bT">선생님</button></div>
+  </div></div>`;
+  const inp = $("#gname");
+  const start = () => { const g = inp.value.trim(); if(!g){ inp.focus(); toast("모둠 이름을 적어 주세요"); return; } S.group = g; save(); go({name:"board"}); };
+  $("#bGo").onclick = start;
+  inp.addEventListener("keydown", e => { if(e.key==="Enter") start(); });
+  if($("#bNew")) $("#bNew").onclick = () => confirmBox("처음부터 새로 할까요?", "이 기기에 저장된 판단과 근거가 모두 지워집니다.", "지우고 시작", () => { const g = inp.value.trim(); S = blank(); S.group = g; save(); render(); });
+  $("#bT").onclick = () => codeBox("선생님 메뉴", "선생님 비밀번호를 입력하세요.", v => v === String(CFG.teacherPin), () => go({name:"teacher"}));
+}
+
+/* ================= 자료 목록 ================= */
+function thumbHTML(it){
+  const f = esc(it.file);
+  let inner = "";
+  if(it.type==="photo") inner = `<img src="${f}" alt="" loading="lazy" onerror="this.parentNode.classList.add('nofile');this.remove()">`;
+  else if(it.type==="video") inner = `<video src="${f}#t=0.5" muted playsinline preload="metadata" onerror="this.parentNode.classList.add('nofile');this.remove()"></video>`;
+  else inner = `<div class="ph" style="color:var(--coral)">${ICON.audio.replace('class="ico"','class="ico" style="width:46px;height:46px"')}<span>소리 자료</span></div>`;
+  return inner;
+}
+function judgeMark(it, s){
+  if(!S.unlocked || !s || !s.done) return "";
+  const v = s.s3.v;
+  if(v==="HOLD") return `<span class="mark hold">정답 ${it.answer==="AI"?"AI":"진짜"}</span>`;
+  return v===it.answer ? `<span class="mark ok">✓ 맞음</span>` : `<span class="mark no">✗ 다름</span>`;
+}
+function renderBoard(){
+  const n = doneCount();
+  const rows = ["photo","video","audio"].map(tp => {
+    const list = ITEMS.filter(i => i.type===tp);
+    return `<div class="media-row"><h3>${ICON[tp]}${TYPE[tp].name}</h3><div class="grid3">${list.map(it => {
+      const s = S.items[it.id];
+      const state = s && s.done ? `<span class="verdict ${s.s3.v}">${VNAME[s.s3.v]}</span>${judgeMark(it,s)}`
+        : s && (s.step>0 || s.first.v) ? `<span class="chip gray">진행 중</span>` : `<span class="chip gray" style="background:#fff;border:1px solid var(--line)">아직 안 함</span>`;
+      return `<button class="mcard ${s&&s.done?'done':''}" data-open="${it.id}">
+        <div class="mthumb">${thumbHTML(it)}<span class="badge-num">자료 ${it.id}</span>${it.trial?'<span class="badge-trial">앞에서 본 자료</span>':''}</div>
+        <div class="mbody"><div class="mtitle">${esc(it.title)}</div><div class="mstate">${state}</div></div></button>`;
+    }).join("")}</div></div>`;
+  }).join("");
+  app.innerHTML = topBar(`<span class="chip">${esc(S.group)}</span><button class="btn ghost sm" id="bHome">처음 화면</button>`) +
+  `<div class="wrap">
+    <div class="board-head"><div><h2>판별할 자료 ${ITEMS.length}점</h2><p>순서는 자유입니다. 자료마다 세 단계를 거쳐 판단과 근거를 입력해요.</p></div>
+      <div class="prog"><div class="prog-bar"><i style="width:${n/ITEMS.length*100}%"></i></div><div class="prog-txt">${n} / ${ITEMS.length} 판단 완료</div></div></div>
+    ${ITEMS.some(i=>i.trial) ? `<div class="notice"><b style="color:var(--coral-d)">앞에서 본 자료</b>는 활동 1에서 모둠 칠판에 적은 처음 판단을 먼저 입력한 뒤, 세 단계를 지켜 다시 판별합니다.</div>`:""}
+    ${rows}
+    <div class="board-actions">
+      ${S.unlocked ? `<span class="chip">정답 공개됨</span>` : `<button class="btn ghost" id="bUnlock">정답 확인하기</button>`}
+      <button class="btn dark" id="bRes">우리 모둠 결과 보기</button>
+    </div>
+  </div>`;
+  $$("[data-open]").forEach(b => b.onclick = () => go({name:"item", id:b.dataset.open}));
+  $("#bHome").onclick = () => go({name:"start"});
+  $("#bRes").onclick = () => go({name:"results"});
+  if($("#bUnlock")) $("#bUnlock").onclick = () => codeBox("정답 확인하기", "선생님이 알려 주는 정답 확인 코드를 입력하세요.", v => v === String(CFG.revealCode), () => { S.unlocked = true; save(); toast("정답이 공개되었어요"); render(); });
+}
+
+/* ================= 매체 살펴보기 도구 ================= */
+function phHTML(it, msg){ return `<div class="placeholder">${ICON[it.type].replace('class="ico"','class="ico" style="width:44px;height:44px"')}<b>${msg||"자료 파일 준비 중"}</b><span>${esc(it.file)}</span></div>`; }
+
+function mountPhoto(stage, tools, it){
+  stage.innerHTML = `<div class="ph-wrap loupe-on"><img class="ph-img" src="${esc(it.file)}" alt="${esc(it.title)}" draggable="false"><div class="lens"></div></div>`;
+  const wrap = $(".ph-wrap", stage), img = $(".ph-img", stage), lens = $(".lens", stage);
+  img.onerror = () => { stage.innerHTML = phHTML(it); tools.innerHTML = ""; };
+  let zoom = 2.5, on = true;
+  tools.innerHTML = `<button class="tool on" data-l>${ICON.search} 돋보기</button><span class="tool-sep"></span><span class="tool-label">배율</span>
+    ${[2,2.5,4].map(z=>`<button class="tool ${z===zoom?'on':''}" data-z="${z}">${z}배</button>`).join("")}`;
+  const hint = `<div class="tool-hint">사진 위를 손가락으로 누른 채 움직이면 돋보기가 따라가요.</div>`;
+  tools.insertAdjacentHTML("afterend", hint); cleanups.push(()=>{ const h = tools.nextElementSibling; if(h && h.classList.contains("tool-hint")) h.remove(); });
+  $("[data-l]", tools).onclick = e => { on = !on; e.currentTarget.classList.toggle("on", on); wrap.classList.toggle("loupe-on", on); lens.style.display="none"; };
+  $$("[data-z]", tools).forEach(b => b.onclick = () => { zoom = +b.dataset.z; $$("[data-z]", tools).forEach(x=>x.classList.toggle("on", x===b)); });
+  let active = false;
+  function move(e){
+    if(!on) return;
+    const r = img.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    if(x<0||y<0||x>r.width||y>r.height){ if(e.pointerType==="mouse") lens.style.display="none"; return; }
+    const L = 190, off = e.pointerType==="mouse" ? 0 : -110;
+    lens.style.display = "block";
+    lens.style.left = x+"px"; lens.style.top = (y+off)+"px";
+    lens.style.backgroundImage = `url("${img.currentSrc||img.src}")`;
+    lens.style.backgroundSize = (r.width*zoom)+"px "+(r.height*zoom)+"px";
+    lens.style.backgroundPosition = (-(x*zoom - L/2))+"px "+(-(y*zoom - L/2))+"px";
+  }
+  img.addEventListener("pointerdown", e => { if(!on) return; active = true; try{ img.setPointerCapture(e.pointerId); }catch(_){} move(e); e.preventDefault(); });
+  img.addEventListener("pointermove", e => { if(active || e.pointerType==="mouse") move(e); });
+  const end = e => { active = false; if(e.pointerType!=="mouse") lens.style.display="none"; };
+  img.addEventListener("pointerup", end); img.addEventListener("pointercancel", end);
+  img.addEventListener("pointerleave", e => { if(e.pointerType==="mouse") lens.style.display="none"; });
+}
+
+function mountVideo(stage, tools, it){
+  stage.innerHTML = `<video class="vid" src="${esc(it.file)}" playsinline preload="auto"></video>`;
+  const v = $("video", stage);
+  let failed = false;
+  v.onerror = () => { failed = true; stage.innerHTML = phHTML(it); tools.innerHTML = ""; };
+  tools.innerHTML = `<button class="tool" data-a="play">▶ 재생</button><button class="tool" data-a="restart">⟲ 처음</button>
+    <span class="tool-sep"></span><button class="tool" data-a="back">◀ 0.1초</button><button class="tool" data-a="fwd">0.1초 ▶</button>
+    <span class="tool-sep"></span><span class="tool-label">속도</span>${[1,0.5,0.25].map(r=>`<button class="tool ${r===1?'on':''}" data-r="${r}">${r}배</button>`).join("")}
+    <button class="tool" data-a="loop">반복</button>
+    <div style="display:flex;align-items:center;gap:10px;width:100%;margin-top:4px"><input type="range" class="seek" min="0" max="1000" value="0"><span class="time">0:00.0 / 0:00.0</span></div>`;
+  const pb = $('[data-a="play"]', tools), seek = $(".seek", tools), time = $(".time", tools);
+  const upd = () => { pb.innerHTML = v.paused ? "▶ 재생" : "❚❚ 멈춤"; if(v.duration){ seek.value = Math.round(v.currentTime/v.duration*1000); } time.textContent = fmt(v.currentTime)+" / "+fmt(v.duration); };
+  ["play","pause","timeupdate","loadedmetadata","seeked"].forEach(ev => v.addEventListener(ev, upd));
+  tools.onclick = e => {
+    const b = e.target.closest("button"); if(!b || failed) return;
+    const a = b.dataset.a;
+    if(a==="play"){ if(v.paused){ const p = v.play(); if(p && p.catch) p.catch(()=>{}); } else v.pause(); }
+    if(a==="restart"){ v.currentTime = 0; }
+    if(a==="back"){ v.pause(); v.currentTime = Math.max(0, v.currentTime-0.1); }
+    if(a==="fwd"){ v.pause(); v.currentTime = Math.min(v.duration||0, v.currentTime+0.1); }
+    if(a==="loop"){ v.loop = !v.loop; b.classList.toggle("on", v.loop); }
+    if(b.dataset.r){ v.playbackRate = +b.dataset.r; $$("[data-r]", tools).forEach(x=>x.classList.toggle("on", x===b)); }
+  };
+  seek.oninput = () => { if(v.duration) v.currentTime = seek.value/1000*v.duration; };
+  tools.insertAdjacentHTML("afterend", `<div class="tool-hint">0.5배·0.25배로 느리게 보거나, 멈춘 뒤 ◀ ▶로 한 장면씩 넘겨 보세요.</div>`);
+  cleanups.push(()=>{ v.pause(); const h = tools.nextElementSibling; if(h && h.classList.contains("tool-hint")) h.remove(); });
+}
+
+function mountAudio(stage, tools, it){
+  stage.innerHTML = `<div class="wave-box"><div class="audio-icon">${ICON.audio} 소리 자료 · 이어폰을 끼고 들어요</div><div class="wave"><canvas></canvas></div></div><audio src="${esc(it.file)}" preload="auto"></audio>`;
+  const au = $("audio", stage), wave = $(".wave", stage), cv = $("canvas", stage), ctx = cv.getContext("2d");
+  let peaks = null, region = null, drag = null, raf = 0, failed = false, waveMsg = "소리 그림을 그리는 중…";
+  au.onerror = () => { failed = true; stage.innerHTML = phHTML(it); tools.innerHTML = ""; };
+  function draw(){
+    const W = wave.clientWidth, H = wave.clientHeight, dpr = window.devicePixelRatio||1;
+    if(cv.width !== Math.round(W*dpr)){ cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); }
+    ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+    const dur = au.duration || 0;
+    if(region && dur){ ctx.fillStyle = "rgba(239,91,79,.22)"; ctx.fillRect(region[0]/dur*W, 0, (region[1]-region[0])/dur*W, H); }
+    if(peaks){
+      const n = peaks.length, mid = H/2, prog = dur ? au.currentTime/dur : 0;
+      for(let i=0;i<n;i++){ const x = i/n*W, h = Math.max(1, peaks[i]*(H*0.44)); ctx.fillStyle = (i/n < prog) ? "#EF5B4F" : "#8C8077"; ctx.fillRect(x, mid-h, Math.max(1, W/n-1), h*2); }
+    } else { ctx.fillStyle = "#8C8077"; ctx.font = "15px 'Noto Sans KR', sans-serif"; ctx.textAlign="center"; ctx.fillText(waveMsg, W/2, H/2+5); }
+    if(dur){ const px = au.currentTime/dur*W; ctx.fillStyle="#fff"; ctx.fillRect(px-1,0,2,H); }
+  }
+  function loop(){ if(region && au.currentTime >= region[1]) au.currentTime = region[0]; draw(); if(!au.paused) raf = requestAnimationFrame(loop); }
+  // 파형 만들기
+  (async () => {
+    if(Array.isArray(it.peaks) && it.peaks.length){ peaks = it.peaks.slice(); draw(); return; }
+    try{
+      const res = await fetch(it.file); if(!res.ok) throw 0;
+      const buf = await res.arrayBuffer();
+      const AC = window.AudioContext || window.webkitAudioContext;
+      const ac = new AC();
+      const data = await new Promise((ok, no) => { const p = ac.decodeAudioData(buf, ok, no); if(p && p.then) p.then(ok, no); });
+      const ch = data.getChannelData(0), N = 300, step = Math.floor(ch.length/N) || 1; const pk = [];
+      let mx = 0;
+      for(let i=0;i<N;i++){ let m=0; for(let j=i*step;j<(i+1)*step && j<ch.length;j+=4){ const a=Math.abs(ch[j]); if(a>m) m=a; } pk.push(m); if(m>mx) mx=m; }
+      peaks = pk.map(p => mx ? p/mx : 0);
+      try{ ac.close(); }catch(e){}
+    }catch(e){ waveMsg = "소리 그림은 볼 수 없지만, 소리는 들을 수 있어요"; }
+    draw();
+  })();
+  tools.innerHTML = `<button class="tool" data-a="play">▶ 재생</button><button class="tool" data-a="restart">⟲ 처음</button>
+    <span class="tool-sep"></span><span class="tool-label">속도</span>${[1,0.75,0.5].map(r=>`<button class="tool ${r===1?'on':''}" data-r="${r}">${r}배</button>`).join("")}
+    <span class="tool-sep"></span><button class="tool" data-a="clear" disabled>구간 반복 해제</button><span class="time">0:00.0 / 0:00.0</span>`;
+  const pb = $('[data-a="play"]', tools), time = $(".time", tools), clr = $('[data-a="clear"]', tools);
+  const upd = () => { pb.innerHTML = au.paused ? "▶ 재생" : "❚❚ 멈춤"; time.textContent = fmt(au.currentTime)+" / "+fmt(au.duration); draw(); };
+  ["play","pause","timeupdate","loadedmetadata","seeked"].forEach(ev => au.addEventListener(ev, upd));
+  au.addEventListener("play", () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); });
+  au.addEventListener("ended", () => { if(region){ au.currentTime = region[0]; au.play().catch(()=>{}); } });
+  tools.onclick = e => {
+    const b = e.target.closest("button"); if(!b || failed) return;
+    const a = b.dataset.a;
+    if(a==="play"){ if(au.paused){ if(region && (au.currentTime<region[0]||au.currentTime>=region[1])) au.currentTime = region[0]; au.play().catch(()=>{}); } else au.pause(); }
+    if(a==="restart"){ au.currentTime = region ? region[0] : 0; }
+    if(a==="clear"){ region = null; clr.disabled = true; draw(); }
+    if(b.dataset.r){ au.playbackRate = +b.dataset.r; $$("[data-r]", tools).forEach(x=>x.classList.toggle("on", x===b)); }
+  };
+  const tAt = e => { const r = wave.getBoundingClientRect(); return Math.min(1, Math.max(0, (e.clientX-r.left)/r.width)) * (au.duration||0); };
+  wave.addEventListener("pointerdown", e => { if(!au.duration) return; drag = {t0:tAt(e), x0:e.clientX}; try{ wave.setPointerCapture(e.pointerId); }catch(_){} });
+  wave.addEventListener("pointermove", e => { if(!drag) return; if(Math.abs(e.clientX-drag.x0) > 8){ const t = tAt(e); region = [Math.min(drag.t0,t), Math.max(drag.t0,t)]; draw(); } });
+  wave.addEventListener("pointerup", e => {
+    if(!drag) return;
+    if(Math.abs(e.clientX-drag.x0) <= 8){ au.currentTime = drag.t0; }
+    else if(region && region[1]-region[0] > 0.2){ clr.disabled = false; au.currentTime = region[0]; au.play().catch(()=>{}); }
+    else region = null;
+    drag = null; draw();
+  });
+  const ro = new ResizeObserver(draw); ro.observe(wave);
+  tools.insertAdjacentHTML("afterend", `<div class="tool-hint">소리 그림을 누르면 그 위치로 이동하고, 옆으로 끌면 그 구간만 반복해서 들려줘요.</div>`);
+  cleanups.push(()=>{ au.pause(); cancelAnimationFrame(raf); ro.disconnect(); const h = tools.nextElementSibling; if(h && h.classList.contains("tool-hint")) h.remove(); });
+}
+
+/* ================= 자료 판별 화면 ================= */
+function stepsFor(it){ return it.trial ? ["first","s1","s2","s3"] : ["s1","s2","s3"]; }
+function stepDone(it, s, k){
+  if(k==="first") return !!s.first.v;
+  if(k==="s1") return !!(s.s1.who && s.s1.found && s.s1.trust);
+  if(k==="s2") return TYPE[it.type].qs.every((q,i) => !!s.s2.a[i]);
+  if(k==="s3") return s3Ready(it, s);
+}
+function s3Ready(it, s){
+  const v = s.s3.v; if(!v) return false;
+  if(!(s.s3.reason||"").trim()) return false;
+  if(v==="HOLD" && !(s.s3.more||"").trim()) return false;
+  if(it.trial && s.first.v && s.first.v !== v && !s.s3.changeStep) return false;
+  return true;
+}
+function renderItem(){
+  const demo = !!view.demo, it = getItem(view.id, demo);
+  if(!it){ go({name: demo?"teacher":"board"}); return; }
+  const s = st(it.id, demo), keys = stepsFor(it);
+  if(s.step >= keys.length) s.step = keys.length-1;
+  const right = demo ? `<span class="chip dark">시연 모드</span><button class="btn ghost sm" id="bBack">선생님 메뉴로</button>`
+                     : `<span class="chip">${esc(S.group)}</span><button class="btn ghost sm" id="bBack">자료 목록</button>`;
+  app.innerHTML = topBar(right) + `<div class="wrap"><div class="item-wrap">
+    <div class="panel media-panel">
+      <div class="media-head"><span class="chip">${demo? "시연 자료" : "자료 "+it.id} · ${TYPE[it.type].name}</span>${it.trial?'<span class="chip dark">앞에서 본 자료</span>':''}<h2 style="width:100%">${esc(it.title)}</h2></div>
+      <div class="stage" id="stage"></div>
+      <div class="tools" id="tools"></div>
+    </div>
+    <div class="panel step-panel">
+      <div class="stepper" id="stepper"></div>
+      <div class="step-body" id="sbody"></div>
+    </div>
+  </div></div>`;
+  $("#bBack").onclick = () => go({name: demo?"teacher":"board"});
+  const stage = $("#stage"), tools = $("#tools");
+  ({photo:mountPhoto, video:mountVideo, audio:mountAudio})[it.type](stage, tools, it);
+  drawSteps(it, s, demo);
+}
+function drawSteps(it, s, demo){
+  const keys = stepsFor(it);
+  const labels = {first:["0","처음 판단"], s1:["1","출처 확인"], s2:["2","자세히 살펴보기"], s3:["3","판단하기"]};
+  $("#stepper").innerHTML = keys.map((k,i) => {
+    const reachable = i===0 || keys.slice(0,i).every(kk => stepDone(it,s,kk));
+    const ok = stepDone(it,s,k) && i !== s.step;
+    return `<button data-step="${i}" class="${i===s.step?'cur':''} ${ok?'ok':''}" ${reachable?'':'disabled'}><i>${ok?'✓':labels[k][0]}</i>${labels[k][1]}</button>`;
+  }).join("");
+  $$("[data-step]").forEach(b => b.onclick = () => { s.step = +b.dataset.step; persist(demo); drawSteps(it, s, demo); });
+  const body = $("#sbody"), k = keys[s.step];
+  ({first:stepFirst, s1:step1, s2:step2, s3:step3})[k](body, it, s, demo);
+}
+function persist(demo){ if(!demo) save(); }
+function optRow(name, opts, cur, cls){ return `<div class="opts">${opts.map(([v,l]) => `<button class="opt ${cur===v?'sel '+(cls?v:''):''}" data-q="${name}" data-v="${v}">${l}</button>`).join("")}</div>`; }
+function footer(it, s, demo, isLast){
+  const keys = stepsFor(it), k = keys[s.step], ok = stepDone(it, s, k);
+  return `<div class="step-foot">${s.step>0?'<button class="btn ghost" data-prev>← 이전 단계</button>':'<span></span>'}
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${ok?'':'<span class="need">모든 질문에 답하면 다음으로 갈 수 있어요</span>'}
+    ${isLast ? `<button class="btn" data-save ${ok?'':'disabled'}>판단 저장하기</button>` : `<button class="btn" data-next ${ok?'':'disabled'}>다음 단계 →</button>`}</div></div>`;
+}
+function bindFoot(body, it, s, demo){
+  const p = $("[data-prev]", body), n = $("[data-next]", body);
+  if(p) p.onclick = () => { s.step--; persist(demo); drawSteps(it, s, demo); scrollStep(); };
+  if(n) n.onclick = () => { s.step++; persist(demo); drawSteps(it, s, demo); scrollStep(); };
+}
+function scrollStep(){ if(window.innerWidth <= 900){ const el = $("#stepper"); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); } }
+function refreshFoot(body, it, s, demo, isLast){ const f = $(".step-foot", body); if(f){ f.outerHTML = footer(it, s, demo, isLast); bindFoot(body, it, s, demo); if(isLast) bindSave(body, it, s, demo); } $$("#stepper button").length && drawStepperOnly(it, s, demo); }
+function drawStepperOnly(it, s, demo){
+  const keys = stepsFor(it);
+  $$("#stepper button").forEach((b,i) => {
+    const reachable = i===0 || keys.slice(0,i).every(kk => stepDone(it,s,kk));
+    b.disabled = !reachable;
+    const ok = stepDone(it,s,keys[i]) && i !== s.step; b.classList.toggle("ok", ok);
+    const ic = $("i", b); ic.textContent = ok ? "✓" : (keys[i]==="first" ? "0" : keys[i].slice(1));
+  });
+}
+
+/* 0. 처음 판단 (체험 자료) */
+function stepFirst(body, it, s, demo){
+  body.innerHTML = `<h3 class="step-title">처음 판단 옮겨 적기</h3>
+    <p class="step-desc">활동 1에서 모둠 칠판에 적었던 판단을 그대로 옮깁니다. 고치지 말고 그대로 적어요.</p>
+    <div class="q"><div class="q-label"><span class="n">1</span>처음에 우리 모둠은 무엇이라고 판단했나요?</div>
+      ${optRow("fv", [["AI","AI 콘텐츠"],["REAL","진짜 콘텐츠"],["HOLD","판단 보류"]], s.first.v)}</div>
+    <div class="q"><div class="q-label"><span class="n">2</span>그때 적은 까닭 <span style="color:var(--ink3);font-weight:500">(‘그냥 그런 느낌’도 괜찮아요)</span></div>
+      <textarea class="memo" data-m="fwhy" rows="2" placeholder="예) 손가락이 여섯 개로 보였기 때문에">${esc(s.first.why||"")}</textarea></div>
+    ${footer(it, s, demo, false)}`;
+  $$('[data-q="fv"]', body).forEach(b => b.onclick = () => { s.first.v = b.dataset.v; persist(demo); $$('[data-q="fv"]', body).forEach(x => x.classList.toggle("sel", x===b)); refreshFoot(body, it, s, demo, false); });
+  $('[data-m="fwhy"]', body).oninput = e => { s.first.why = e.target.value; persist(demo); };
+  bindFoot(body, it, s, demo);
+}
+
+/* 1. 출처 확인하기 */
+function step1(body, it, s, demo){
+  const src = it.source || {exists:false};
+  const post = src.exists ? `<div class="post"><div class="post-top"><div class="avatar ${src.account==='official'?'official':''}">${esc((src.name||"?").slice(0,1))}</div>
+      <div><div class="post-name">${esc(src.name)}<span class="acc ${src.account==='official'?'official':'personal'}">${ACC[src.account]||""}</span></div>
+      <div class="post-meta">${[src.platform, src.date].filter(Boolean).map(esc).join(" · ")}</div></div></div><p class="post-text">${esc(src.text)}</p></div>`
+    : `<div class="post none"><div class="big">?</div><b>누가 올렸는지 나와 있지 않아요</b><div style="font-size:14px;margin-top:4px">${esc(src.platform||"")} ${src.text?"· "+esc(src.text):""}</div>
+       <div id="rev">${s.s1.reversed ? revHTML(it) : `<button class="btn sm" style="margin-top:12px" id="bRev">${ICON.search} 역검색 해 보기</button><div style="font-size:13px;color:var(--ink3);margin-top:6px">출처가 없으면 역검색으로 처음 올라온 곳과 때를 찾아요.</div>`}</div></div>`;
+  const needRev = !src.exists && !s.s1.reversed;
+  body.innerHTML = `<h3 class="step-title">1단계 · 출처 확인하기</h3>
+    <p class="step-desc">누가, 언제, 어디에 올렸는지 찾습니다.</p>
+    ${post}
+    <div class="q"><div class="q-label"><span class="n">1</span>누가 올렸나요?</div>${optRow("who", [["official","공식 계정"],["personal","개인 계정"],["unknown","알 수 없음"]], s.s1.who)}</div>
+    <div class="q"><div class="q-label"><span class="n">2</span>언제, 어디에서 처음 올라왔는지 찾았나요?</div>
+      ${needRev ? `<div class="q-tip" style="margin-left:0">먼저 위의 ‘역검색 해 보기’를 눌러 보세요.</div>` : ""}
+      ${optRow("found", [["yes","찾았다"],["no","찾지 못했다"]], s.s1.found)}</div>
+    <div class="q"><div class="q-label"><span class="n">3</span>출처는 믿을 만한 곳인가요?</div>${optRow("trust", [["yes","믿을 만하다"],["no","믿기 어렵다"],["unk","잘 모르겠다"]], s.s1.trust)}</div>
+    <div class="q"><div class="q-label"><span class="n">+</span>더 알아낸 점 <span style="color:var(--ink3);font-weight:500">(선택)</span></div>
+      <textarea class="memo" data-m="s1memo" rows="2" placeholder="예) 뉴스 이름처럼 보이지만 개인 계정이다">${esc(s.s1.memo||"")}</textarea></div>
+    ${footer(it, s, demo, false)}`;
+  if(needRev) $$('[data-q="found"]', body).forEach(b => b.disabled = true);
+  $$(".opt", body).forEach(b => b.onclick = () => {
+    const q = b.dataset.q; s.s1[q] = b.dataset.v; persist(demo);
+    $$(`[data-q="${q}"]`, body).forEach(x => x.classList.toggle("sel", x===b));
+    refreshFoot(body, it, s, demo, false);
+  });
+  $('[data-m="s1memo"]', body).oninput = e => { s.s1.memo = e.target.value; persist(demo); };
+  const br = $("#bRev", body);
+  if(br) br.onclick = () => {
+    $("#rev", body).innerHTML = `<div class="revbox"><div class="scan"><span class="spinner"></span>같은 자료가 처음 올라온 곳을 찾는 중…</div></div>`;
+    setTimeout(() => { s.s1.reversed = true; persist(demo); $("#rev", body).innerHTML = revHTML(it); $$('[data-q="found"]', body).forEach(b => b.disabled = false); const tip = $(".q-tip", body); if(tip) tip.remove(); }, 1400);
+  };
+  bindFoot(body, it, s, demo);
+}
+function revHTML(it){ return `<div class="revbox"><div class="lbl">역검색 결과</div>${esc(it.reverse || "처음 올라온 곳을 찾을 수 없어요.")}</div>`; }
+
+/* 2. 자세히 살펴보기 */
+function step2(body, it, s, demo){
+  const T = TYPE[it.type];
+  body.innerHTML = `<h3 class="step-title">2단계 · 자세히 살펴보기</h3>
+    <p class="step-desc">${T.name} 질문을 순서대로 확인하고, 확인한 것을 그때그때 적습니다. ${T.tool}</p>
+    ${T.qs.map((q,i) => `<div class="q"><div class="q-label"><span class="n">${i+1}</span>${q[0]}</div><div class="q-tip">${q[2]}</div>
+      ${optRow("a"+i, S2OPT, s.s2.a[i], true)}
+      <textarea class="memo ${s.s2.a[i]==='odd'?'':'hidden'}" data-m="${i}" rows="1" placeholder="무엇이 이상했나요? 예) 간판 글자가 뭉개져 있다">${esc(s.s2.m[i]||"")}</textarea></div>`).join("")}
+    ${footer(it, s, demo, false)}`;
+  $$(".opt", body).forEach(b => b.onclick = () => {
+    const i = +b.dataset.q.slice(1); s.s2.a[i] = b.dataset.v; persist(demo);
+    $$(`[data-q="a${i}"]`, body).forEach(x => { x.className = "opt" + (x===b ? " sel "+x.dataset.v : ""); });
+    const m = $(`[data-m="${i}"]`, body); m.classList.toggle("hidden", b.dataset.v!=="odd"); if(b.dataset.v==="odd") m.focus();
+    refreshFoot(body, it, s, demo, false);
+  });
+  $$("textarea[data-m]", body).forEach(t => t.oninput = () => { s.s2.m[+t.dataset.m] = t.value; persist(demo); });
+  bindFoot(body, it, s, demo);
+}
+
+/* 3. 판단하기 */
+function evidenceList(it, s){
+  const ev = [], src = it.source||{};
+  const who = {official:"공식 계정이 올렸다", personal:"개인 계정이 올렸다", unknown:"누가 올렸는지 알 수 없다"}[s.s1.who];
+  if(who) ev.push(["src","1단계", who]);
+  if(s.s1.found==="no") ev.push(["src","1단계","처음 올라온 곳을 찾지 못했다"]);
+  if(s.s1.found==="yes" && s.s1.trust==="yes") ev.push(["src","1단계","처음 올라온 곳이 믿을 만하다"]);
+  if(s.s1.trust==="no") ev.push(["src","1단계","출처를 믿기 어렵다"]);
+  if((s.s1.memo||"").trim()) ev.push(["src","1단계", s.s1.memo.trim()]);
+  TYPE[it.type].qs.forEach((q,i) => {
+    const a = s.s2.a[i], m = (s.s2.m[i]||"").trim();
+    if(a==="odd") ev.push(["odd","2단계", m || q[3]]);
+    if(a==="nat") ev.push(["nat","2단계", q[4]]);
+  });
+  return ev;
+}
+function step3(body, it, s, demo){
+  const ev = evidenceList(it, s), v = s.s3.v;
+  const trialPart = (it.trial && s.first.v) ? `<div class="first-box">처음 판단: <span class="verdict ${s.first.v}">${VNAME[s.first.v]}</span> ${s.first.why?`<span style="color:var(--ink2)">— ${esc(s.first.why)}</span>`:""}</div>` : "";
+  const changed = it.trial && s.first.v && v && s.first.v !== v;
+  body.innerHTML = `<h3 class="step-title">3단계 · 판단하기</h3>
+    <p class="step-desc">찾은 근거를 바탕으로 판단합니다. 근거가 부족하면 판단을 보류하는 것도 방법이에요.</p>
+    ${trialPart}
+    <div class="judge">${["AI","REAL","HOLD"].map(k => `<button class="jbtn ${k} ${v===k?'sel':''}" data-v="${k}">${VNAME[k]}<small>${k==="HOLD"?"근거가 부족해요":k==="AI"?"AI로 만든 것 같아요":"실제 자료 같아요"}</small></button>`).join("")}</div>
+    <div class="q"><div class="q-label"><span class="n">!</span>근거 고르기 — 누르면 아래 근거 칸에 들어가요</div>
+      <div class="chips">${ev.length ? ev.map((e,i) => `<button class="ev ${e[0]}" data-ev="${i}"><b>${e[1]}</b>${esc(e[2])}</button>`).join("") : `<span style="color:var(--ink3);font-size:14px">1·2단계에서 찾은 근거가 없어요. 직접 적어 주세요.</span>`}</div>
+      <textarea class="memo" id="reason" rows="3" placeholder="근거에는 몇 단계에서 찾았는지 함께 씁니다.">${esc(s.s3.reason||"")}</textarea></div>
+    <div class="q ${v==="HOLD"?"":"hidden"}" id="moreQ"><div class="q-label"><span class="n">?</span>판단을 보류했다면, 더 확인할 점은 무엇인가요?</div>
+      <textarea class="memo" id="more" rows="2" placeholder="예) 학교 누리집에 같은 영상이 있는지 확인한다">${esc(s.s3.more||"")}</textarea></div>
+    <div class="q ${changed?"":"hidden"}" id="chQ"><div class="q-label"><span class="n">↺</span>처음 판단과 달라졌어요. 어느 단계에서 생각이 바뀌었나요?</div>
+      ${optRow("cs", [["1","1단계 출처"],["2","2단계 살펴보기"],["3","3단계 판단"]], s.s3.changeStep)}
+      <textarea class="memo" id="chWhy" rows="1" placeholder="무엇을 보고 생각이 바뀌었나요?">${esc(s.s3.changeWhy||"")}</textarea></div>
+    <div class="sentence" id="sent"></div>
+    ${footer(it, s, demo, true)}`;
+  const reason = $("#reason", body);
+  const sentence = () => {
+    const vv = s.s3.v ? VNAME[s.s3.v] : "";
+    $("#sent", body).innerHTML = `이 자료는 <span class="blank">${esc(vv)||"&nbsp;"}</span>입니다. 그 근거는 <span class="blank">${esc((s.s3.reason||"").trim())||"&nbsp;"}</span>입니다.` +
+      (s.s3.v==="HOLD" ? `<br>더 확인할 점은 <span class="blank">${esc((s.s3.more||"").trim())||"&nbsp;"}</span>입니다.` : "");
+    $$("[data-ev]", body).forEach(b => b.classList.toggle("used", (s.s3.reason||"").includes(ev[+b.dataset.ev][2])));
+  };
+  $$(".jbtn", body).forEach(b => b.onclick = () => {
+    s.s3.v = b.dataset.v; persist(demo);
+    $$(".jbtn", body).forEach(x => x.classList.toggle("sel", x===b));
+    $("#moreQ", body).classList.toggle("hidden", s.s3.v!=="HOLD");
+    $("#chQ", body).classList.toggle("hidden", !(it.trial && s.first.v && s.first.v !== s.s3.v));
+    sentence(); refreshFoot(body, it, s, demo, true);
+  });
+  $$("[data-ev]", body).forEach(b => b.onclick = () => {
+    const e = ev[+b.dataset.ev], piece = `${e[1]}에서 ${e[2]}`;
+    const cur = (reason.value||"").trim();
+    if(cur.includes(e[2])) return;
+    reason.value = cur ? cur.replace(/[.\s]+$/,"") + ", " + piece : piece;
+    s.s3.reason = reason.value; persist(demo); sentence(); refreshFoot(body, it, s, demo, true);
+  });
+  reason.oninput = () => { s.s3.reason = reason.value; persist(demo); sentence(); refreshFoot(body, it, s, demo, true); };
+  $("#more", body).oninput = e => { s.s3.more = e.target.value; persist(demo); sentence(); refreshFoot(body, it, s, demo, true); };
+  $("#chWhy", body).oninput = e => { s.s3.changeWhy = e.target.value; persist(demo); };
+  $$('[data-q="cs"]', body).forEach(b => b.onclick = () => { s.s3.changeStep = b.dataset.v; persist(demo); $$('[data-q="cs"]', body).forEach(x => x.classList.toggle("sel", x===b)); refreshFoot(body, it, s, demo, true); });
+  sentence();
+  bindFoot(body, it, s, demo); bindSave(body, it, s, demo);
+}
+function bindSave(body, it, s, demo){
+  const b = $("[data-save]", body); if(!b) return;
+  b.onclick = () => {
+    s.done = true; persist(demo);
+    if(demo){
+      const m = modal(`<h3>시연 자료 정답</h3><p style="margin-bottom:10px">우리 판단: <span class="verdict ${s.s3.v}">${VNAME[s.s3.v]}</span> · 정답: <span class="verdict ${it.answer}">${VNAME[it.answer]}</span></p>
+        ${analysisHTML(it, s)}<p style="margin-top:12px;color:var(--ink)">${esc(it.explain||"")}</p><div class="acts"><button class="btn" data-x>선생님 메뉴로</button></div>`);
+      m.querySelector("[data-x]").onclick = () => go({name:"teacher"});
+    } else { toast(`자료 ${it.id} 판단을 저장했어요`); go({name:"board"}); }
+  };
+}
+
+/* ---------- 어긋난 단계 분석 ---------- */
+function analyze(it, s){
+  const exp = it.sourceVerdict, t = s.s1.trust;
+  const s1ok = exp==="trust" ? t==="yes" : exp==="doubt" ? t==="no" : (t==="unk" || t==="no");
+  const qs = TYPE[it.type].qs, clues = it.clues || [];
+  const missed = clues.filter(i => s.s2.a[i] !== "odd").map(i => qs[i][1]);
+  const found = clues.filter(i => s.s2.a[i] === "odd").map(i => qs[i][1]);
+  const over = it.answer==="REAL" ? qs.map((q,i)=>i).filter(i => s.s2.a[i]==="odd").map(i => qs[i][1]) : [];
+  const s2ok = missed.length===0 && over.length===0;
+  const v = s.s3.v, s3 = v==="HOLD" ? "hold" : (v===it.answer ? "ok" : "no");
+  let first = "";
+  if(s3!=="ok"){ first = !s1ok ? "1단계" : !s2ok ? "2단계" : "3단계"; }
+  return {s1ok, s2ok, missed, found, over, s3, first};
+}
+function analysisHTML(it, s){
+  const a = analyze(it, s);
+  const s1txt = a.s1ok ? "출처를 알맞게 판단했어요" : `출처 판단이 달랐어요 (알맞은 판단: ${{trust:"믿을 만하다",doubt:"믿기 어렵다",unknown:"알 수 없다"}[it.sourceVerdict]})`;
+  let s2txt;
+  if(it.answer==="REAL") s2txt = a.over.length ? `실제로는 자연스러운 부분을 이상하다고 봤어요: ${a.over.join(", ")}` : "자연스러운 부분을 알맞게 봤어요";
+  else s2txt = a.missed.length ? `놓친 단서: ${a.missed.join(", ")}${a.found.length?` · 찾은 단서: ${a.found.join(", ")}`:""}` : `단서를 모두 찾았어요: ${a.found.join(", ")||"-"}`;
+  const s3txt = a.s3==="ok" ? "판단이 정답과 같아요" : a.s3==="hold" ? `판단을 보류했어요 — 보류도 판단입니다` : "판단이 정답과 달라요";
+  return `<div class="ana-box">
+    <div class="ana-step"><span class="s ${a.s1ok?'ok':'no'}">1단계</span><span>${esc(s1txt)}</span></div>
+    <div class="ana-step"><span class="s ${a.s2ok?'ok':'no'}">2단계</span><span>${esc(s2txt)}</span></div>
+    <div class="ana-step"><span class="s ${a.s3==='ok'?'ok':a.s3==='no'?'no':''}">3단계</span><span>${esc(s3txt)}</span></div>
+    ${a.first ? `<div style="margin-top:6px;font-weight:700;color:var(--coral-d)">→ ${a.first}에서 어긋났어요</div>` : ""}</div>`;
+}
+
+/* ================= 결과 ================= */
+function renderResults(){
+  const trials = ITEMS.filter(i => i.trial);
+  app.innerHTML = topBar(`<span class="chip">${esc(S.group)}</span><button class="btn ghost sm" id="bBack">자료 목록</button>`) + `<div class="wrap">
+    <div class="res-head"><div><h2>${esc(S.group)} 판별 결과</h2><p style="margin:2px 0 0;color:var(--ink2)">${doneCount()} / ${ITEMS.length} 판단 완료 · ${new Date().toLocaleDateString("ko-KR")}</p></div>
+      <div style="flex:1"></div>${S.unlocked?'':'<button class="btn ghost" id="bUnlock">정답 확인하기</button>'}<button class="btn" id="bPng">결과 이미지 만들기</button></div>
+    <table class="res-table"><thead><tr><th>자료</th><th>우리 판단</th><th>근거</th>${S.unlocked?'<th>정답</th>':''}</tr></thead><tbody>
+    ${ITEMS.map(it => { const s = S.items[it.id]; const d = s && s.done;
+      return `<tr><td class="nm">자료 ${it.id}<br><span style="font-weight:500;color:var(--ink3);font-size:13px">${TYPE[it.type].name}${it.trial?" · 앞에서 본 자료":""}</span></td>
+      <td>${d?`<span class="verdict ${s.s3.v}">${VNAME[s.s3.v]}</span>`:'<span style="color:var(--ink3)">아직 안 함</span>'}</td>
+      <td>${d?esc(s.s3.reason):""}${d&&s.s3.v==="HOLD"?`<span class="more">더 확인할 점: ${esc(s.s3.more)}</span>`:""}${S.unlocked&&d?analysisHTML(it,s):""}</td>
+      ${S.unlocked?`<td style="white-space:nowrap"><span class="verdict ${it.answer}">${VNAME[it.answer]}</span><div style="margin-top:6px">${judgeMark(it,s)}</div></td>`:""}</tr>`; }).join("")}
+    </tbody></table>
+    ${trials.length ? `<div class="sect"><h3>앞에서 본 자료 — 처음 판단과 나중 판단</h3><div class="trial-grid">${trials.map(it => { const s = S.items[it.id];
+      const f = s && s.first.v, l = s && s.done ? s.s3.v : null;
+      return `<div class="tcard"><b>자료 ${it.id} · ${TYPE[it.type].name}</b>
+        <div class="tflow">${f?`<span class="verdict ${f}">${VNAME[f]}</span>`:'<span class="chip gray">-</span>'} → ${l?`<span class="verdict ${l}">${VNAME[l]}</span>`:'<span class="chip gray">-</span>'}</div>
+        ${f&&l? (f!==l ? `<p><b style="color:var(--coral-d)">${s.s3.changeStep}단계</b>에서 생각이 바뀜${s.s3.changeWhy?" — "+esc(s.s3.changeWhy):""}</p>` : `<p>처음 판단과 같아요.</p>`) : `<p>아직 끝나지 않았어요.</p>`}
+        ${S.unlocked?`<p>정답: <b>${VNAME[it.answer]}</b></p>`:""}</div>`; }).join("")}</div></div>` : ""}
+    ${S.unlocked ? `<p style="margin-top:20px;color:var(--ink2)">점수보다 ‘어느 단계에서 어긋났는지’를 찾아봅시다. 절차를 지켜도 틀릴 수 있어요.</p>` : ""}
+  </div>`;
+  $("#bBack").onclick = () => go({name:"board"});
+  $("#bPng").onclick = makePng;
+  if($("#bUnlock")) $("#bUnlock").onclick = () => codeBox("정답 확인하기", "선생님이 알려 주는 정답 확인 코드를 입력하세요.", v => v === String(CFG.revealCode), () => { S.unlocked = true; save(); toast("정답이 공개되었어요"); render(); });
+}
+
+/* ---------- 결과 이미지(PNG) ---------- */
+let dlPromise = null;
+function getDownloads(){
+  if(!dlPromise) dlPromise = (async () => { try{ if(window.claude && typeof window.claude.use === "function") return await window.claude.use("downloads"); }catch(e){} return null; })();
+  return dlPromise;
+}
+function wrapText(ctx, text, maxW){
+  const out = []; String(text||"").split("\n").forEach(par => {
+    let line = "";
+    for(const ch of par){ const t = line + ch; if(ctx.measureText(t).width > maxW && line){ out.push(line); line = ch; } else line = t; }
+    out.push(line);
+  });
+  return out;
+}
+async function makePng(){
+  try{ await document.fonts.ready; }catch(e){}
+  const W = 1400, P = 48, F = "'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif";
+  const cols = S.unlocked ? [170, 210, 720, 204] : [170, 230, 904];
+  const cv = document.createElement("canvas"), ctx = cv.getContext("2d");
+  ctx.font = `20px ${F}`;
+  const rows = ITEMS.map(it => {
+    const s = S.items[it.id], d = s && s.done;
+    let txt = d ? s.s3.reason : "";
+    if(d && s.s3.v==="HOLD") txt += `\n더 확인할 점: ${s.s3.more}`;
+    if(d && S.unlocked){ const a = analyze(it, s); if(a.first) txt += `\n→ ${a.first}에서 어긋남`; }
+    const lines = wrapText(ctx, txt, cols[2]-28);
+    return {it, s, d, lines, h: Math.max(S.unlocked ? 96 : 76, lines.length*30 + 34)};
+  });
+  const trials = ITEMS.filter(i => i.trial);
+  const trialH = trials.length ? 70 + 130 : 0;
+  const H = 190 + 52 + rows.reduce((a,r)=>a+r.h,0) + trialH + 70;
+  cv.width = W; cv.height = H;
+  ctx.fillStyle = "#FAF6F2"; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle = "#EF5B4F"; ctx.fillRect(0,0,W,10);
+  ctx.fillStyle = "#EF5B4F"; ctx.font = `700 22px ${F}`; ctx.fillText("D-FACT 판별 노트 · 5학년 3~4차시", P, 62);
+  ctx.fillStyle = "#3E3630"; ctx.font = `900 46px ${F}`; ctx.fillText(`${S.group} 판별 결과`, P, 124);
+  ctx.fillStyle = "#6E645B"; ctx.font = `20px ${F}`; ctx.fillText(`${doneCount()} / ${ITEMS.length} 판단 완료 · ${new Date().toLocaleDateString("ko-KR")}${S.unlocked?" · 정답 공개 후":""}`, P, 160);
+  let y = 190; const x0 = P, TW = W-P*2;
+  // header
+  ctx.fillStyle = "#F0E9E3"; roundRect(ctx, x0, y, TW, 52, 14, true);
+  ctx.fillStyle = "#6E645B"; ctx.font = `700 19px ${F}`;
+  const heads = S.unlocked ? ["자료","우리 판단","근거","정답"] : ["자료","우리 판단","근거"];
+  let cx = x0; heads.forEach((h,i) => { ctx.fillText(h, cx+16, y+33); cx += cols[i]; });
+  y += 52;
+  const VC = {AI:["#FDECE9","#EF5B4F"], REAL:["#E3F4EE","#23866A"], HOLD:["#FCF2DC","#C98A0C"]};
+  rows.forEach((r, idx) => {
+    ctx.fillStyle = idx%2 ? "#FFFFFF" : "#FFFDFB"; ctx.fillRect(x0, y, TW, r.h);
+    ctx.fillStyle = "#E9E0D8"; ctx.fillRect(x0, y, TW, 1);
+    let cx = x0;
+    ctx.fillStyle = "#3E3630"; ctx.font = `700 21px ${F}`; ctx.fillText(`자료 ${r.it.id}`, cx+16, y+36);
+    ctx.fillStyle = "#A0958B"; ctx.font = `16px ${F}`; ctx.fillText(TYPE[r.it.type].name + (r.it.trial?" · 체험":""), cx+16, y+60);
+    cx += cols[0];
+    if(r.d){ pill(ctx, VNAME[r.s.s3.v], cx+16, y+18, VC[r.s.s3.v], F); } else { ctx.fillStyle="#A0958B"; ctx.font=`18px ${F}`; ctx.fillText("아직 안 함", cx+16, y+40); }
+    cx += cols[1];
+    ctx.fillStyle = "#3E3630"; ctx.font = `20px ${F}`;
+    r.lines.forEach((ln, i) => { ctx.fillStyle = ln.startsWith("더 확인할 점") ? "#C98A0C" : ln.startsWith("→") ? "#D4433A" : "#3E3630"; ctx.fillText(ln, cx+14, y+38+i*30); });
+    cx += cols[2];
+    if(S.unlocked){
+      pill(ctx, VNAME[r.it.answer], cx+16, y+18, VC[r.it.answer], F);
+      if(r.d){ const v = r.s.s3.v; ctx.font = `900 18px ${F}`; ctx.fillStyle = v==="HOLD" ? "#C98A0C" : v===r.it.answer ? "#23866A" : "#EF5B4F"; ctx.fillText(v==="HOLD" ? "보류" : v===r.it.answer ? "✓ 맞음" : "✗ 다름", cx+16, y+78); }
+    }
+    y += r.h;
+  });
+  ctx.strokeStyle = "#E9E0D8"; ctx.lineWidth = 1.5; roundRect(ctx, x0, 190, TW, y-190, 14, false);
+  if(trials.length){
+    y += 50; ctx.fillStyle = "#3E3630"; ctx.font = `700 24px ${F}`; ctx.fillText("앞에서 본 자료 — 처음 판단 → 나중 판단", P, y); y += 20;
+    const cw = (TW - 24) / 3;
+    trials.forEach((it, i) => {
+      const s = S.items[it.id], bx = P + i*(cw+12);
+      ctx.fillStyle = "#fff"; roundRect(ctx, bx, y, cw, 110, 14, true); ctx.strokeStyle="#E9E0D8"; roundRect(ctx, bx, y, cw, 110, 14, false);
+      ctx.fillStyle = "#3E3630"; ctx.font = `700 19px ${F}`; ctx.fillText(`자료 ${it.id} · ${TYPE[it.type].name}`, bx+16, y+32);
+      const f = s && s.first.v, l = s && s.done ? s.s3.v : null;
+      let px = bx+16;
+      if(f){ px = pill(ctx, VNAME[f], px, y+46, VC[f], F) + 10; } else { ctx.fillStyle="#A0958B"; ctx.font=`18px ${F}`; ctx.fillText("-", px, y+70); px += 24; }
+      ctx.fillStyle = "#6E645B"; ctx.font = `700 20px ${F}`; ctx.fillText("→", px, y+68); px += 32;
+      if(l){ pill(ctx, VNAME[l], px, y+46, VC[l], F); } else { ctx.fillStyle="#A0958B"; ctx.font=`18px ${F}`; ctx.fillText("-", px, y+70); }
+      ctx.font = `16px ${F}`; ctx.fillStyle = "#6E645B";
+      const note = f && l ? (f!==l ? `${s.s3.changeStep}단계에서 생각이 바뀜` : "처음 판단과 같음") : "진행 중";
+      ctx.fillText(note, bx+16, y+100);
+    });
+    y += 110;
+  }
+  ctx.fillStyle = "#A0958B"; ctx.font = `16px ${F}`; ctx.fillText("프로그램은 판단을 대신해 주지 않습니다. 판단은 우리가 합니다.", P, H-28);
+  const url = cv.toDataURL("image/png");
+  const fname = `판별결과_${S.group.replace(/[\\/:*?"<>|\s]+/g,"_")}.png`;
+  const m = modal(`<h3>결과 이미지</h3><p>저장한 이미지를 학급 누리집에 올려 다른 모둠과 비교해요. 저장이 안 되면 이미지를 길게 눌러 저장하세요.</p>
+    <img class="png-prev" src="${url}" alt="판별 결과 이미지"><div class="err" id="dlErr"></div>
+    <div class="acts"><button class="btn ghost" data-x>닫기</button><button class="btn" id="bDl">이미지 저장</button></div>`, {wide:true});
+  m.querySelector("[data-x]").onclick = closeModal;
+  m.querySelector("#bDl").onclick = async () => {
+    const blob = await new Promise(r => cv.toBlob(r, "image/png"));
+    const dl = await Promise.race([getDownloads(), new Promise(r => setTimeout(() => r(null), 1500))]);
+    if(dl){
+      try{ await dl.save({filename: fname, data: blob}); toast("이미지를 저장했어요"); return; }
+      catch(e){ if(e && e.code==="declined"){ return; } }
+    }
+    try{
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      $("#dlErr").textContent = "저장되지 않았다면 위 이미지를 길게 누르거나 오른쪽 클릭해 저장하세요.";
+    }catch(e){ $("#dlErr").textContent = "이 화면에서는 바로 저장이 안 돼요. 위 이미지를 길게 눌러 저장하세요."; }
+  };
+}
+function roundRect(ctx, x, y, w, h, r, fill){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); fill ? ctx.fill() : ctx.stroke(); }
+function pill(ctx, text, x, y, c, F){ ctx.font = `900 18px ${F}`; const w = ctx.measureText(text).width + 24; ctx.fillStyle = c[0]; roundRect(ctx, x, y, w, 34, 9, true); ctx.fillStyle = c[1]; ctx.fillText(text, x+12, y+24); return x + w; }
+
+/* ================= 선생님 메뉴 ================= */
+function renderTeacher(){
+  const all = ITEMS.map(i => ({it:i, demo:false})).concat(DEMO.map(i => ({it:i, demo:true})));
+  app.innerHTML = topBar(`<span class="chip dark">선생님 메뉴</span><button class="btn ghost sm" id="bOut">나가기</button>`) + `<div class="wrap">
+    <div class="board-head"><div><h2>선생님 메뉴</h2><p>시연, 정답 공개, 자료 점검을 여기서 합니다.</p></div></div>
+    <div class="t-grid">
+      <div class="panel t-card"><h3>교사 시연 (3단계 검증 방법 알기)</h3><p>TV에 띄우고 학생들과 함께 세 단계를 진행합니다. 시연 기록은 저장되지 않아요.</p>
+        <div class="demo-list">${DEMO.map(d => `<button class="demo-btn" data-demo="${esc(d.id)}"><span class="ic" style="color:var(--coral)">${ICON[d.type]}</span>${esc(d.title)}</button>`).join("")}</div></div>
+      <div class="panel t-card"><h3>정답 공개</h3><p>되돌아보기 시간에 코드를 TV에 띄우면, 모둠이 태블릿에 입력해 정답과 ‘어긋난 단계’를 확인합니다.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="bCode">정답 확인 코드 크게 보기</button><button class="btn ghost" id="bAns">정답표 보기 (TV용)</button></div></div>
+      <div class="panel t-card"><h3>자료 점검</h3><p>수업 전에 이 기기에서 모든 자료 파일이 열리는지 확인합니다.</p>
+        <ul class="check-list" id="chk">${all.map(({it,demo}) => `<li data-chk="${demo?'d':''}${esc(it.id)}"><span>${demo?"시연":"자료 "+it.id} · ${TYPE[it.type].name} <span style="color:var(--ink3)">${esc(it.file)}</span></span><span class="st-wait">확인 중…</span></li>`).join("")}</ul></div>
+      <div class="panel t-card"><h3>이 기기 기록</h3><p>모둠 기록은 이 태블릿 안에만 저장됩니다. 다음 반 수업 전에 지워 주세요.</p>
+        <p style="color:var(--ink)">현재: <b>${esc(S.group||"(모둠 없음)")}</b> · ${doneCount()} / ${ITEMS.length} 판단 완료 · 정답 ${S.unlocked?"공개됨":"잠김"}</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" id="bLock" ${S.unlocked?"":"disabled"}>정답 다시 잠그기</button><button class="btn dark" id="bReset">이 기기 기록 지우기</button></div>
+        <p style="margin:14px 0 0;font-size:13px">자료 제목·출처 카드·정답·단서는 <b>materials.js</b> 파일에서 바꿀 수 있어요.</p></div>
+    </div></div>`;
+  $("#bOut").onclick = () => go({name:"start"});
+  $$("[data-demo]").forEach(b => b.onclick = () => { delete DS[b.dataset.demo]; go({name:"item", id:b.dataset.demo, demo:true}); });
+  $("#bCode").onclick = () => { const m = modal(`<h3 style="text-align:center">정답 확인 코드</h3><div class="bigcode">${esc(CFG.revealCode)}</div><p style="text-align:center">태블릿의 ‘정답 확인하기’를 누르고 이 번호를 입력하세요.</p><div class="acts"><button class="btn" data-x>닫기</button></div>`, {wide:true}); m.querySelector("[data-x]").onclick = closeModal; };
+  $("#bAns").onclick = () => go({name:"answers"});
+  $("#bLock").onclick = () => { S.unlocked = false; save(); toast("정답을 다시 잠갔어요"); render(); };
+  $("#bReset").onclick = () => confirmBox("이 기기 기록을 지울까요?", "모둠 이름, 판단, 근거, 정답 공개 상태가 모두 지워집니다.", "모두 지우기", () => { S = blank(); save(); toast("기록을 지웠어요"); render(); });
+  all.forEach(({it, demo}) => checkFile(it).then(ok => {
+    const li = $(`[data-chk="${demo?'d':''}${it.id}"]`); if(!li) return;
+    const sp = li.lastElementChild; sp.className = ok ? "st-ok" : "st-no"; sp.textContent = ok ? "✓ 열림" : "✗ 파일 없음";
+    if(!ok && !$("#chkHint")) $("#chk").insertAdjacentHTML("afterend", `<p id="chkHint" style="margin:12px 0 0;font-size:13px;color:var(--coral-d)">파일 이름을 확인하세요. 윈도우 탐색기에서 [보기 → 표시 → 파일 확장명]을 켜면 m1.jpg.jpg처럼 확장자가 두 번 붙은 이름이 보입니다. 정확히 m1.jpg가 되도록 고쳐 주세요.</p>`);
+  }));
+}
+function checkFile(it){
+  return new Promise(res => {
+    let done = false; const fin = v => { if(!done){ done = true; res(v); } };
+    setTimeout(() => fin(false), 8000);
+    if(it.type==="photo"){ const im = new Image(); im.onload = () => fin(true); im.onerror = () => fin(false); im.src = it.file; }
+    else { const el = document.createElement(it.type==="video"?"video":"audio"); el.preload = "metadata"; el.onloadedmetadata = () => fin(true); el.onerror = () => fin(false); el.src = it.file; }
+  });
+}
+function renderAnswers(){
+  app.innerHTML = topBar(`<span class="chip dark">정답표</span><button class="btn ghost sm" id="bBack">선생님 메뉴로</button>`) + `<div class="wrap">
+    <div class="board-head"><div><h2>정답을 확인해 봅시다</h2><p>점수보다 ‘어느 단계에서 어긋났는지’를 찾는 데 시간을 씁니다.</p></div></div>
+    <table class="res-table ans-table"><thead><tr><th>자료</th><th>정답</th><th class="hide-sm">출처(1단계)</th><th class="hide-sm">단서(2단계)</th><th>설명</th></tr></thead><tbody>
+    ${ITEMS.map(it => `<tr><td class="nm">자료 ${it.id}<br><span style="font-weight:500;color:var(--ink3);font-size:13px">${TYPE[it.type].name}${it.trial?" · 체험 자료":""}</span></td>
+      <td><span class="verdict ${it.answer}">${VNAME[it.answer]}</span></td>
+      <td class="hide-sm" style="white-space:nowrap">${{trust:"믿을 만함",doubt:"믿기 어려움",unknown:"알 수 없음"}[it.sourceVerdict]||"-"}</td>
+      <td class="hide-sm">${(it.clues||[]).map(i => TYPE[it.type].qs[i][1]).join(", ") || "자연스러움"}</td>
+      <td>${esc(it.explain||"")}</td></tr>`).join("")}
+    </tbody></table></div>`;
+  $("#bBack").onclick = () => go({name:"teacher"});
+}
+
+/* 시작 */
+getDownloads();
+if(S.group && view.name==="start") view = {name:"start"};
+render();
+})();
+</script>
+</body>
+</html>
